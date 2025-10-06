@@ -12,7 +12,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import { CheckCircle2 } from "lucide-react";
+import { CheckCircle2, Loader2 } from "lucide-react";
+import { useMutation } from "@tanstack/react-query";
+import { apiRequest } from "@/lib/queryClient";
 
 interface ContactFormData {
   name: string;
@@ -36,13 +38,28 @@ export default function ContactForm() {
     },
   });
 
+  const submitMutation = useMutation({
+    mutationFn: async (data: ContactFormData) => {
+      return apiRequest("POST", "/api/contact", data);
+    },
+    onSuccess: () => {
+      setIsSubmitted(true);
+      toast({
+        title: "Message sent successfully",
+        description: "We'll review your inquiry and respond if it aligns with our mandate.",
+      });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Error sending message",
+        description: error.message || "Please try again later.",
+        variant: "destructive",
+      });
+    },
+  });
+
   const onSubmit = (data: ContactFormData) => {
-    console.log("Form submitted:", data);
-    setIsSubmitted(true);
-    toast({
-      title: "Message sent successfully",
-      description: "We'll review your inquiry and respond if it aligns with our mandate.",
-    });
+    submitMutation.mutate(data);
   };
 
   if (isSubmitted) {
@@ -105,6 +122,7 @@ export default function ContactForm() {
                       {...field}
                       data-testid="input-name"
                       placeholder="Your full name"
+                      disabled={submitMutation.isPending}
                       className="bg-card border-2 h-14 text-base focus:border-primary transition-all"
                     />
                   </FormControl>
@@ -132,6 +150,7 @@ export default function ContactForm() {
                       data-testid="input-email"
                       type="email"
                       placeholder="your.email@company.com"
+                      disabled={submitMutation.isPending}
                       className="bg-card border-2 h-14 text-base focus:border-primary transition-all"
                     />
                   </FormControl>
@@ -153,6 +172,7 @@ export default function ContactForm() {
                     {...field}
                     data-testid="input-organization"
                     placeholder="Your company or organization"
+                    disabled={submitMutation.isPending}
                     className="bg-card border-2 h-14 text-base focus:border-primary transition-all"
                   />
                 </FormControl>
@@ -173,6 +193,7 @@ export default function ContactForm() {
                     {...field}
                     data-testid="input-objective"
                     placeholder="What are you looking to accomplish?"
+                    disabled={submitMutation.isPending}
                     className="bg-card border-2 h-14 text-base focus:border-primary transition-all"
                   />
                 </FormControl>
@@ -194,6 +215,7 @@ export default function ContactForm() {
                     data-testid="input-message"
                     placeholder="Provide details about your situation, constraints, and what you're looking for..."
                     rows={8}
+                    disabled={submitMutation.isPending}
                     className="bg-card border-2 text-base resize-none focus:border-primary transition-all"
                   />
                 </FormControl>
@@ -206,9 +228,17 @@ export default function ContactForm() {
             data-testid="button-submit-contact"
             type="submit"
             size="lg"
+            disabled={submitMutation.isPending}
             className="w-full text-lg py-7 shadow-2xl shadow-primary/20 hover:shadow-primary/30 transition-all duration-300"
           >
-            Submit Inquiry
+            {submitMutation.isPending ? (
+              <>
+                <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                Sending...
+              </>
+            ) : (
+              "Submit Inquiry"
+            )}
           </Button>
         </form>
       </Form>
