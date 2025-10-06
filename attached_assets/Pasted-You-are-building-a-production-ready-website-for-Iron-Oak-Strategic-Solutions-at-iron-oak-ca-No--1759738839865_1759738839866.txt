@@ -1,0 +1,195 @@
+You are building a production-ready website for “Iron & Oak Strategic Solutions” at iron-oak.ca. No placeholders. No lorem. All pages ship complete with final copy below. The app must prompt the operator on first run for contact details, save them to /config/site.json, and use that across the site.
+
+TECH
+- Next.js 14 App Router + TypeScript
+- Tailwind CSS + shadcn/ui + lucide-react
+- File-based content in /content/services as MDX with frontmatter
+- Simple writeable API routes that persist JSON to /config and /data on Replit filesystem
+- next-seo for SEO
+
+FIRST-RUN SETUP (no placeholders)
+- On npm run dev: run a small CLI wizard (node script in /scripts/setup.ts) that asks:
+  - Company display name
+  - Domain (iron-oak.ca)
+  - Contact email
+  - Phone
+  - Mailing address (single line)
+  - City, Region, Country
+  - Booking link (Calendly or similar; if none, accept blank and omit the button)
+- Save answers to /config/site.json. All pages read from this file.
+- Add an /admin/setup route that re-opens the same form to edit values and re-save /config/site.json.
+- Validate fields, show clear success toasts. No authentication needed for this prototype, but hide route from nav.
+
+LEAD CAPTURE (fully functional, no placeholders)
+- /api/contact: POST writes to /data/leads.json as an array with timestamp, ip (if available), name, email, org, message.
+- Contact page form uses this API, shows success state. Add a /admin/leads page that lists leads in a simple table and offers “Download CSV” button that generates /data/leads.csv on click and serves it.
+
+GLOBAL STYLE
+- Dark, minimal, confident. Near-black bg, neutral greys, emerald accents.
+- Rounded-2xl cards, soft shadows, real spacing. Inter font or equivalent.
+
+NAV
+- Home, About, Services, Contact, Book a Strategy Call (hide if no booking link in site.json)
+
+FOOTER
+- One-line descriptor, nav links, © 2025 Iron & Oak Consulting and Management. Privacy Policy, Terms of Service.
+
+SEO
+- Title: Iron & Oak Strategic Solutions
+- Description: Strategy, operational architecture, and AI systems for organizations that need to work under pressure.
+- OG image: simple abstract brand image generated in code (SVG), no client logos.
+
+COPY — USE AS-IS (no rewrites, no placeholders)
+
+HOME
+Hero
+H1: Hard problems, simple systems, durable outcomes.
+Sub: Iron & Oak designs strategy, operational architecture, and AI systems that hold under pressure.
+Primary CTA: Book a Strategy Call (use booking link from site.json if present)
+Secondary CTA: View Services
+
+Trust markers row:
+- Strategic Architecture
+- Operational Systems
+- AI Delivery
+- Risk and Resilience
+
+What We Do (4 cards)
+- Sovereign-grade Strategy: Long-range positioning and decision frameworks built for clarity and control.
+- Operational Architecture: Programs, SOPs, and management systems that perform at load.
+- AI Systems Integration: LLM-driven workflows and automation tied to measurable outcomes.
+- Risk and Resilience: Failure planning, controls, and buffers that reduce fragility.
+
+Engagement Process (4 steps)
+1. Strategic Assessment: Map reality, constraints, and objectives.
+2. Architecture Design: Define legal, financial, operational, and data frameworks.
+3. Implementation Planning: Milestones, ownership, and controls.
+4. Execution Support: Guidance, iteration, and measurable results.
+
+Final CTA block
+Heading: Ready to discuss your strategic needs?
+Button: Book a Strategy Call
+
+ABOUT
+Intro: Iron & Oak is a strategy and systems firm. We build the plans, controls, and platforms that keep organizations stable and effective.
+Principles:
+1. Clarity first.
+2. Architecture before action.
+3. Numbers over narrative.
+4. Ship what works.
+Operating model: Advisory, architecture, and execution support. We do not publish case studies. We focus on outcomes.
+
+SERVICES (index intro)
+Elite consulting solutions designed for operational excellence and strategic clarity. Each engagement is customized to context and objectives.
+
+Service list with short blurbs, each links to its page:
+- Strategic Business Architecture: Exclusive frameworks for operational excellence and growth.
+- AI System Integration: AI implementation that creates asymmetric advantage.
+- Executive Project Management: Oversight and delivery for critical initiatives.
+- Operational Optimization: Process design for efficiency and throughput.
+- Persona System Deployment: Strategic identity frameworks for founders and operators.
+- Startup and Venture Strategy: Foundations for early and growth-stage ventures.
+- Full-Stack Automation Planning: End-to-end automation across teams and tools.
+- Trust Mapping and Governance Architecture: Governance designs that separate risk and preserve optionality.
+- Corporate Structuring and Entity Design: Entity architectures aligned to strategy and control.
+- Treasury and Capital Strategy: Cash, credit, and runway frameworks that stabilize operations.
+- Compliance and Policy Systems: Practical policies that guide action and protect operations.
+- Risk, Resilience, and Continuity: Failure-tolerant planning with measurable safeguards.
+- Data, Automation, and AI Pipelines: Data flows and agents tied to real metrics.
+
+SERVICE PAGE TEMPLATE (for each page in /content/services/*.mdx)
+Frontmatter:
+title: "<Service Name>"
+summary: "<2 sentence outcome-focused summary>"
+whereFits:
+  - Strategy
+  - Operations
+  - Finance
+  - Data
+deliverables:
+  - Frameworks and decision artifacts
+  - Implementation guidance and controls
+  - Metrics and review cadence
+ctaText: "Discuss this service"
+ctaLink: "/contact"
+
+Body content guidance for each service (fill exactly as below; no placeholders):
+
+Strategic Business Architecture
+Summary: Exclusive frameworks for operational excellence and growth. We design operating models that align leadership, numbers, and delivery.
+Deliverables: long-range vision architecture, systems design methodology, high-performance execution frameworks.
+
+AI System Integration
+Summary: AI implementation that creates asymmetric advantage. We integrate models and workflows where they move numbers, not where they add noise.
+Deliverables: AI strategy architecture, LLM integration, workflow automation systems.
+
+Executive Project Management
+Summary: Oversight and delivery for critical initiatives with disciplined cadence and risk control.
+Deliverables: initiative execution plans, cross-functional leadership, risk management.
+
+Operational Optimization
+Summary: Process redesign to remove friction and increase throughput with measurable standards.
+Deliverables: process reengineering, resource allocation frameworks, performance metric design.
+
+Persona System Deployment
+Summary: Strategic identity and communication frameworks for founders and operators.
+Deliverables: executive persona development, positioning architecture, communication frameworks.
+
+Startup and Venture Strategy
+Summary: Foundations and growth plans that are realistic, staged, and accountable.
+Deliverables: market positioning frameworks, growth acquisition architecture, capital structure planning.
+
+Full-Stack Automation Planning
+Summary: End-to-end automation design across teams and tools with clear ownership and observability.
+Deliverables: process automation architecture, AI agent strategy, integration ecosystem design.
+
+Trust Mapping and Governance Architecture
+Summary: Governance designs that separate risk and preserve optionality without overexposure.
+Deliverables: trust mapping, board and policy frameworks, enforceable decision pathways.
+
+Corporate Structuring and Entity Design
+Summary: Entity architectures aligned to strategy, control, and clean execution.
+Deliverables: holding models, role and rights mapping, operating agreements and controls.
+
+Treasury and Capital Strategy
+Summary: Cash, credit, and runway frameworks that stabilize operations under pressure.
+Deliverables: treasury policy, capital stack planning, covenants and risk buffers.
+
+Compliance and Policy Systems
+Summary: Practical policies that guide action, training, and audit-ready documentation.
+Deliverables: program policies, documentation standards, review cycles and controls.
+
+Risk, Resilience, and Continuity
+Summary: Failure-tolerant planning with tested triggers and recovery lanes.
+Deliverables: scenario mapping, continuity plans, threshold-based triggers.
+
+Data, Automation, and AI Pipelines
+Summary: Data flows, agents, and observability tied to real metrics and governance.
+Deliverables: data model design, orchestration, feedback loops.
+
+CONTACT
+Heading: Contact Iron & Oak
+Copy: We respond to selected inquiries that fit our mandate.
+Form fields: name, email, organization, objective, message. Submit to /api/contact. Show success state. No placeholders.
+
+BOOK A STRATEGY CALL
+- If booking link exists in /config/site.json, render “Book now” button that opens it.
+- If no link, render a simple paragraph: “Use the contact form to request a strategy call.” No placeholders.
+
+LEGAL
+Privacy Policy and Terms of Service: generate straight, generic legal text with company name and domain inserted from site.json. No TODO notes.
+
+ACCESSIBILITY AND PERFORMANCE
+- Lighthouse 95 plus. Semantic HTML. Keyboard navigable. aria labels on interactive components.
+
+DELIVERABLES
+- Routes: /, /about, /services, /services/[slug], /contact, /book, /privacy, /terms, /admin/setup, /admin/leads
+- /scripts/setup.ts for first-run CLI wizard
+- /config/site.json written by wizard and by /admin/setup
+- /api/contact for lead capture, writes to /data/leads.json, generates CSV on demand
+- README with run steps and how to re-run setup
+
+RED TEAM GUARDRAILS
+- Do not mention jurisdictions, counterparties, treaties, or private methods.
+- Keep language high-level and framework-oriented.
+- No placeholders anywhere. Every visible text block must be final.
