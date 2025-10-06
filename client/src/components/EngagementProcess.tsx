@@ -4,58 +4,74 @@ export default function EngagementProcess() {
   const steps = [
     {
       number: "01",
-      title: "Strategic Assessment",
-      description: "Map reality, constraints, and objectives."
+      title: "Strategic Discovery",
+      description: "Diagnose where the signal hides beneath the noise."
     },
     {
       number: "02",
-      title: "Architecture Design",
-      description: "Define legal, financial, operational, and data frameworks."
+      title: "Framework Design",
+      description: "Engineer the structures that convert intention into motion."
     },
     {
       number: "03",
       title: "Implementation Planning",
-      description: "Milestones, ownership, and controls."
+      description: "Build the operational spine: milestones, controls, accountability."
     },
     {
       number: "04",
       title: "Execution Support",
-      description: "Guidance, iteration, and measurable results."
+      description: "Measure, adapt, and refine until performance is self-sustaining."
     }
   ];
 
   return (
-    <section className="py-24 bg-card">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="font-serif text-4xl font-bold text-foreground mb-4">
+    <section className="py-32 bg-card relative overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent"></div>
+      
+      <div className="relative max-w-7xl mx-auto px-6 lg:px-12">
+        <div className="text-center mb-20">
+          <div className="inline-block mb-6 px-4 py-2 rounded-full bg-primary/10 border border-primary/20">
+            <p className="text-sm font-mono text-primary">Our Method</p>
+          </div>
+          <h2 className="font-serif text-5xl lg:text-6xl font-bold text-foreground mb-6">
             Engagement Process
           </h2>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+          <div className="h-1 w-24 bg-gradient-to-r from-primary to-yellow-500 rounded-full mx-auto mb-8"></div>
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
             A disciplined approach to strategy, architecture, and execution.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {steps.map((step, index) => (
-            <Card
+            <div
               key={step.number}
-              data-testid={`card-step-${index}`}
-              className="p-6 relative hover-elevate transition-all duration-300"
+              className="relative"
+              style={{
+                animation: `fade-in-up 0.8s ease-out ${0.15 * index}s both`
+              }}
             >
-              <div className="font-mono text-5xl font-bold text-primary/20 mb-4">
-                {step.number}
-              </div>
-              <h3 className="font-semibold text-lg text-foreground mb-2">
-                {step.title}
-              </h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                {step.description}
-              </p>
+              <Card
+                data-testid={`card-step-${index}`}
+                className="h-full p-8 hover-elevate transition-all duration-500 hover:-translate-y-2 bg-gradient-to-br from-background to-background/50 border-2 hover:border-primary/30 relative overflow-hidden group"
+              >
+                <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-3xl group-hover:bg-primary/10 transition-all duration-500"></div>
+                <div className="relative">
+                  <div className="font-mono text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-br from-primary to-yellow-500 mb-6">
+                    {step.number}
+                  </div>
+                  <h3 className="font-serif text-xl font-bold text-foreground mb-4 leading-tight">
+                    {step.title}
+                  </h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    {step.description}
+                  </p>
+                </div>
+              </Card>
               {index < steps.length - 1 && (
-                <div className="hidden lg:block absolute top-1/2 -right-3 w-6 h-0.5 bg-primary/30"></div>
+                <div className="hidden lg:block absolute top-1/2 -right-4 w-8 h-0.5 bg-gradient-to-r from-primary/50 to-transparent z-10"></div>
               )}
-            </Card>
+            </div>
           ))}
         </div>
       </div>

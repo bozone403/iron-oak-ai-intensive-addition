@@ -16,25 +16,25 @@ export default function Navigation() {
   ];
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-lg border-b border-border">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
-          <Link href="/" className="flex items-center space-x-3 hover-elevate rounded-lg px-3 py-2 transition-all">
-            <div className="w-10 h-10 bg-primary rounded-md flex items-center justify-center">
-              <span className="text-primary-foreground font-bold text-lg">I&O</span>
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-2xl border-b border-border/50">
+      <div className="max-w-7xl mx-auto px-6 lg:px-12">
+        <div className="flex items-center justify-between h-24">
+          <Link href="/" className="flex items-center space-x-4 hover-elevate rounded-xl px-4 py-3 transition-all group">
+            <div className="w-12 h-12 bg-gradient-to-br from-primary to-yellow-500 rounded-xl flex items-center justify-center shadow-lg shadow-primary/20 group-hover:shadow-primary/40 transition-all">
+              <span className="text-background font-bold text-lg">I&O</span>
             </div>
-            <span className="font-serif text-xl font-semibold text-foreground">Iron & Oak</span>
+            <span className="font-serif text-2xl font-semibold text-foreground">Iron & Oak</span>
           </Link>
 
-          <div className="hidden md:flex items-center space-x-1">
+          <div className="hidden md:flex items-center space-x-2">
             {navLinks.map((link) => (
               <Link key={link.href} href={link.href}>
                 <button
                   data-testid={`link-${link.label.toLowerCase()}`}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all hover-elevate ${
+                  className={`px-5 py-3 rounded-xl text-base font-medium transition-all duration-300 ${
                     location === link.href
-                      ? "text-primary"
-                      : "text-muted-foreground hover:text-foreground"
+                      ? "text-primary bg-primary/10"
+                      : "text-muted-foreground hover:text-foreground hover-elevate"
                   }`}
                 >
                   {link.label}
@@ -45,7 +45,11 @@ export default function Navigation() {
 
           <div className="hidden md:block">
             <Link href="/contact">
-              <Button data-testid="button-schedule" size="default" className="font-medium">
+              <Button 
+                data-testid="button-schedule" 
+                size="lg" 
+                className="font-medium shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all"
+              >
                 Schedule a Call
               </Button>
             </Link>
@@ -53,7 +57,7 @@ export default function Navigation() {
 
           <button
             data-testid="button-mobile-menu"
-            className="md:hidden p-2 rounded-lg hover-elevate"
+            className="md:hidden p-3 rounded-xl hover-elevate"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
             {mobileMenuOpen ? (
@@ -66,16 +70,16 @@ export default function Navigation() {
       </div>
 
       {mobileMenuOpen && (
-        <div className="md:hidden bg-card border-t border-border animate-fade-in">
-          <div className="px-6 py-4 space-y-2">
+        <div className="md:hidden bg-card/95 backdrop-blur-2xl border-t border-border/50 animate-fade-in">
+          <div className="px-6 py-6 space-y-2">
             {navLinks.map((link) => (
               <Link key={link.href} href={link.href}>
                 <button
                   data-testid={`link-mobile-${link.label.toLowerCase()}`}
-                  className={`w-full text-left px-4 py-3 rounded-lg text-sm font-medium transition-all hover-elevate ${
+                  className={`w-full text-left px-5 py-4 rounded-xl text-base font-medium transition-all ${
                     location === link.href
-                      ? "text-primary bg-primary/5"
-                      : "text-muted-foreground hover:text-foreground"
+                      ? "text-primary bg-primary/10 border border-primary/20"
+                      : "text-muted-foreground hover:text-foreground hover-elevate"
                   }`}
                   onClick={() => setMobileMenuOpen(false)}
                 >
@@ -86,7 +90,7 @@ export default function Navigation() {
             <Link href="/contact">
               <Button
                 data-testid="button-mobile-schedule"
-                size="default"
+                size="lg"
                 className="w-full mt-4"
                 onClick={() => setMobileMenuOpen(false)}
               >

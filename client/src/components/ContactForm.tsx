@@ -47,24 +47,26 @@ export default function ContactForm() {
 
   if (isSubmitted) {
     return (
-      <div className="max-w-2xl mx-auto text-center py-12 animate-fade-in">
-        <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6">
-          <CheckCircle2 className="w-8 h-8 text-primary" />
+      <div className="max-w-3xl mx-auto text-center py-20 animate-scale-in">
+        <div className="w-24 h-24 bg-gradient-to-br from-primary/20 to-primary/10 rounded-full flex items-center justify-center mx-auto mb-8 shadow-2xl shadow-primary/20">
+          <CheckCircle2 className="w-12 h-12 text-primary" />
         </div>
-        <h3 className="font-serif text-2xl font-bold text-foreground mb-4">
+        <h3 className="font-serif text-4xl font-bold text-foreground mb-6">
           Thank you for reaching out
         </h3>
-        <p className="text-muted-foreground mb-6">
+        <p className="text-lg text-muted-foreground mb-10 leading-relaxed max-w-2xl mx-auto">
           We've received your message and will review it carefully. We respond to selected 
           inquiries that fit our mandate.
         </p>
         <Button
           data-testid="button-send-another"
           variant="outline"
+          size="lg"
           onClick={() => {
             setIsSubmitted(false);
             form.reset();
           }}
+          className="text-base px-8 py-6"
         >
           Send Another Message
         </Button>
@@ -73,65 +75,71 @@ export default function ContactForm() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto">
-      <div className="mb-8">
-        <h2 className="font-serif text-3xl font-bold text-foreground mb-4">
+    <div className="max-w-3xl mx-auto">
+      <div className="mb-12">
+        <div className="inline-block mb-6 px-4 py-2 rounded-full bg-primary/10 border border-primary/20">
+          <p className="text-sm font-mono text-primary">Get in Touch</p>
+        </div>
+        <h2 className="font-serif text-5xl font-bold text-foreground mb-6">
           Contact Iron & Oak
         </h2>
-        <p className="text-muted-foreground">
+        <div className="h-1 w-24 bg-gradient-to-r from-primary to-yellow-500 rounded-full mb-8"></div>
+        <p className="text-lg text-muted-foreground leading-relaxed">
           We respond to selected inquiries that fit our mandate. Please provide details 
           about your organization and strategic objectives.
         </p>
       </div>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          <FormField
-            control={form.control}
-            name="name"
-            rules={{ required: "Name is required" }}
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Name</FormLabel>
-                <FormControl>
-                  <Input
-                    {...field}
-                    data-testid="input-name"
-                    placeholder="Your full name"
-                    className="bg-background"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <FormField
+              control={form.control}
+              name="name"
+              rules={{ required: "Name is required" }}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-base font-medium">Name</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      data-testid="input-name"
+                      placeholder="Your full name"
+                      className="bg-card border-2 h-14 text-base focus:border-primary transition-all"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <FormField
-            control={form.control}
-            name="email"
-            rules={{
-              required: "Email is required",
-              pattern: {
-                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                message: "Invalid email address",
-              },
-            }}
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email</FormLabel>
-                <FormControl>
-                  <Input
-                    {...field}
-                    data-testid="input-email"
-                    type="email"
-                    placeholder="your.email@company.com"
-                    className="bg-background"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            <FormField
+              control={form.control}
+              name="email"
+              rules={{
+                required: "Email is required",
+                pattern: {
+                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                  message: "Invalid email address",
+                },
+              }}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-base font-medium">Email</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      data-testid="input-email"
+                      type="email"
+                      placeholder="your.email@company.com"
+                      className="bg-card border-2 h-14 text-base focus:border-primary transition-all"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
 
           <FormField
             control={form.control}
@@ -139,13 +147,13 @@ export default function ContactForm() {
             rules={{ required: "Organization is required" }}
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Organization</FormLabel>
+                <FormLabel className="text-base font-medium">Organization</FormLabel>
                 <FormControl>
                   <Input
                     {...field}
                     data-testid="input-organization"
                     placeholder="Your company or organization"
-                    className="bg-background"
+                    className="bg-card border-2 h-14 text-base focus:border-primary transition-all"
                   />
                 </FormControl>
                 <FormMessage />
@@ -159,13 +167,13 @@ export default function ContactForm() {
             rules={{ required: "Objective is required" }}
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Strategic Objective</FormLabel>
+                <FormLabel className="text-base font-medium">Strategic Objective</FormLabel>
                 <FormControl>
                   <Input
                     {...field}
                     data-testid="input-objective"
                     placeholder="What are you looking to accomplish?"
-                    className="bg-background"
+                    className="bg-card border-2 h-14 text-base focus:border-primary transition-all"
                   />
                 </FormControl>
                 <FormMessage />
@@ -179,14 +187,14 @@ export default function ContactForm() {
             rules={{ required: "Message is required" }}
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Message</FormLabel>
+                <FormLabel className="text-base font-medium">Message</FormLabel>
                 <FormControl>
                   <Textarea
                     {...field}
                     data-testid="input-message"
                     placeholder="Provide details about your situation, constraints, and what you're looking for..."
-                    rows={6}
-                    className="bg-background resize-none"
+                    rows={8}
+                    className="bg-card border-2 text-base resize-none focus:border-primary transition-all"
                   />
                 </FormControl>
                 <FormMessage />
@@ -198,34 +206,40 @@ export default function ContactForm() {
             data-testid="button-submit-contact"
             type="submit"
             size="lg"
-            className="w-full"
+            className="w-full text-lg py-7 shadow-2xl shadow-primary/20 hover:shadow-primary/30 transition-all duration-300"
           >
             Submit Inquiry
           </Button>
         </form>
       </Form>
 
-      <div className="mt-8 p-6 bg-card rounded-lg border border-card-border">
-        <h3 className="font-semibold text-foreground mb-3">Direct Contact</h3>
-        <div className="space-y-2 text-sm">
-          <p className="text-muted-foreground">
-            <span className="font-medium text-foreground">General inquiries:</span>{" "}
-            <a href="mailto:contact@iron-oak.ca" className="text-primary hover:underline">
+      <div className="mt-12 p-10 bg-gradient-to-br from-card to-primary/5 rounded-3xl border-2 border-card-border">
+        <h3 className="font-serif text-2xl font-bold text-foreground mb-6">Direct Contact</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <p className="text-sm text-muted-foreground mb-2">General Inquiries</p>
+            <a href="mailto:contact@iron-oak.ca" className="text-lg text-primary hover:underline font-medium transition-all">
               contact@iron-oak.ca
             </a>
-          </p>
-          <p className="text-muted-foreground">
-            <span className="font-medium text-foreground">Strategic consulting:</span>{" "}
-            <a href="mailto:strategy@iron-oak.ca" className="text-primary hover:underline">
+          </div>
+          <div>
+            <p className="text-sm text-muted-foreground mb-2">Strategic Consulting</p>
+            <a href="mailto:strategy@iron-oak.ca" className="text-lg text-primary hover:underline font-medium transition-all">
               strategy@iron-oak.ca
             </a>
-          </p>
-          <p className="text-muted-foreground">
-            <span className="font-medium text-foreground">Project inquiries:</span>{" "}
-            <a href="mailto:projects@iron-oak.ca" className="text-primary hover:underline">
+          </div>
+          <div>
+            <p className="text-sm text-muted-foreground mb-2">Project Inquiries</p>
+            <a href="mailto:projects@iron-oak.ca" className="text-lg text-primary hover:underline font-medium transition-all">
               projects@iron-oak.ca
             </a>
-          </p>
+          </div>
+          <div>
+            <p className="text-sm text-muted-foreground mb-2">Client Support</p>
+            <a href="mailto:support@iron-oak.ca" className="text-lg text-primary hover:underline font-medium transition-all">
+              support@iron-oak.ca
+            </a>
+          </div>
         </div>
       </div>
     </div>
