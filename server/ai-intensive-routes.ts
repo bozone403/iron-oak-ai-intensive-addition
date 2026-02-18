@@ -254,7 +254,7 @@ Questions? Reply to this message.`;
       
       return res.status(200).json({
         success: true,
-        message: 'Thank you! You'll receive a call shortly.',
+        message: "Thank you! You'll receive a call shortly.",
         leadId: leadId,
       });
       
