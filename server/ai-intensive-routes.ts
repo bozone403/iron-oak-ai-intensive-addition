@@ -546,4 +546,92 @@ Reply STOP to opt out.`;
       return res.sendStatus(500);
     }
   });
+  
+  // ===================================================================
+  // ADMIN ENDPOINTS
+  // ===================================================================
+  
+  // GET /api/ai/leads
+  app.get('/api/ai/leads', async (req, res) => {
+    try {
+      const leads = await storage.getAllAILeads();
+      return res.json({
+        success: true,
+        leads: leads,
+      });
+    } catch (error) {
+      console.error('Error in /api/ai/leads:', error);
+      return res.status(500).json({
+        success: false,
+        error: 'Failed to fetch leads',
+      });
+    }
+  });
+  
+  // GET /api/ai/leads/download
+  app.get('/api/ai/leads/download', async (req, res) => {
+    try {
+      const leads = await storage.getAllAILeads();
+      
+      // Generate CSV
+      const headers = [
+        'ID',
+        'First Name',
+        'Phone',
+        'Email',
+        'Consent Given',
+        'Consent Timestamp',
+        'Call Status',
+        'Call SID',
+        'Call Duration',
+        'SMS Status',
+        'SMS Outcome',
+        'SMS SID',
+        'SMS Sent At',
+        'Payment Status',
+        'Amount Paid',
+        'Paid At',
+        'Opted Out',
+        'Opted Out At',
+        'Created At',
+        'Updated At',
+      ];
+      
+      const rows = leads.map(lead => [
+        lead.id,
+        lead.firstName,
+        lead.phone,
+        lead.email || '',
+        lead.consentGiven ? 'Yes' : 'No',
+        lead.consentTimestamp,
+        lead.callStatus,
+        lead.callSid || '',
+        lead.callDuration || '',
+        lead.smsStatus,
+        lead.smsOutcome || '',
+        lead.smsSid || '',
+        lead.smsSentAt || '',
+        lead.paymentStatus,
+        lead.amountPaid ? (lead.amountPaid / 100).toFixed(2) : '',
+        lead.paidAt || '',
+        lead.optedOut ? 'Yes' : 'No',
+        lead.optedOutAt || '',
+        lead.createdAt,
+        lead.updatedAt,
+      ]);
+      
+      const csv = [
+        headers.join(','),
+        ...rows.map(row => row.map(cell => `"${cell}"`).join(',')),
+      ].join('\n');
+      
+      res.setHeader('Content-Type', 'text/csv');
+      res.setHeader('Content-Disposition', `attachment; filename="ai-intensive-leads-${new Date().toISOString().split('T')[0]}.csv"`);
+      return res.send(csv);
+      
+    } catch (error) {
+      console.error('Error in /api/ai/leads/download:', error);
+      return res.status(500).send('Failed to generate CSV');
+    }
+  });
 }

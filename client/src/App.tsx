@@ -12,6 +12,8 @@ import Contact from "@/pages/Contact";
 import Privacy from "@/pages/Privacy";
 import Terms from "@/pages/Terms";
 import AIIntensive from "@/pages/AIIntensive";
+import AdminLeads from "@/pages/AdminLeads";
+import AdminAILeads from "@/pages/AdminAILeads";
 
 function Router() {
   return (
@@ -24,6 +26,8 @@ function Router() {
       <Route path="/privacy" component={Privacy} />
       <Route path="/terms" component={Terms} />
       <Route path="/ai" component={AIIntensive} />
+      <Route path="/admin/leads" component={AdminLeads} />
+      <Route path="/admin/ai-leads" component={AdminAILeads} />
       <Route component={NotFound} />
     </Switch>
   );
