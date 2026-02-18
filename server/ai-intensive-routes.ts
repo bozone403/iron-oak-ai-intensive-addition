@@ -170,7 +170,7 @@ Questions? Reply to this message.`;
   };
   
   app.options('/api/ai/submit', cors(corsOptions));
-  app.use('/api/ai/submit', cors(corsOptions));
+  app.use('/api/ai/submit', cors(corsOptions), express.json());
   
   // ===================================================================
   // AI INTENSIVE ROUTES
