@@ -25,7 +25,7 @@ export default function AIIntensive() {
     setErrorMessage('');
 
     try {
-      const apiUrl = import.meta.env.VITE_API_URL || '';
+      const apiUrl = import.meta.env.VITE_API_URL || 'https://iron-oak-ai-intensive-addition.onrender.com';
       const response = await fetch(`${apiUrl}/api/ai/submit`, {
         method: 'POST',
         headers: {
