@@ -1,8 +1,15 @@
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
+import { registerAIIntensiveRoutes } from "./ai-intensive-routes";
 import { setupVite, serveStatic, log } from "./vite";
 
 const app = express();
+
+// CRITICAL: Register AI Intensive routes BEFORE json/urlencoded middleware
+// This allows Stripe webhook to use raw body and Twilio routes to use urlencoded
+registerAIIntensiveRoutes(app);
+
+// Now apply default middleware for other routes
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 

@@ -1,98 +1,36 @@
 import { useState } from "react";
-import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import { Card } from "@/components/ui/card";
+import { Mail, Copy, CheckCircle2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { CheckCircle2, Loader2 } from "lucide-react";
-import { useMutation } from "@tanstack/react-query";
-import { apiRequest } from "@/lib/queryClient";
-
-interface ContactFormData {
-  name: string;
-  email: string;
-  organization: string;
-  objective: string;
-  message: string;
-}
 
 export default function ContactForm() {
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [copiedEmail, setCopiedEmail] = useState<string | null>(null);
   const { toast } = useToast();
 
-  const form = useForm<ContactFormData>({
-    defaultValues: {
-      name: "",
-      email: "",
-      organization: "",
-      objective: "",
-      message: "",
-    },
-  });
+  const emails = [
+    { label: "General Inquiries", address: "contact@iron-oak.ca" },
+    { label: "Strategic Consulting", address: "strategy@iron-oak.ca" },
+    { label: "Project Inquiries", address: "projects@iron-oak.ca" },
+    { label: "Client Support", address: "support@iron-oak.ca" },
+  ];
 
-  const submitMutation = useMutation({
-    mutationFn: async (data: ContactFormData) => {
-      return apiRequest("POST", "/api/contact", data);
-    },
-    onSuccess: () => {
-      setIsSubmitted(true);
-      toast({
-        title: "Message sent successfully",
-        description: "We'll review your inquiry and respond if it aligns with our mandate.",
-      });
-    },
-    onError: (error: any) => {
-      toast({
-        title: "Error sending message",
-        description: error.message || "Please try again later.",
-        variant: "destructive",
-      });
-    },
-  });
-
-  const onSubmit = (data: ContactFormData) => {
-    submitMutation.mutate(data);
+  const copyToClipboard = (email: string) => {
+    navigator.clipboard.writeText(email);
+    setCopiedEmail(email);
+    toast({
+      title: "Email copied",
+      description: "The email address has been copied to your clipboard.",
+    });
+    setTimeout(() => setCopiedEmail(null), 2000);
   };
 
-  if (isSubmitted) {
-    return (
-      <div className="max-w-3xl mx-auto text-center py-20 animate-scale-in">
-        <div className="w-24 h-24 bg-gradient-to-br from-primary/20 to-primary/10 rounded-full flex items-center justify-center mx-auto mb-8 shadow-2xl shadow-primary/20">
-          <CheckCircle2 className="w-12 h-12 text-primary" />
-        </div>
-        <h3 className="font-serif text-4xl font-bold text-foreground mb-6">
-          Thank you for reaching out
-        </h3>
-        <p className="text-lg text-muted-foreground mb-10 leading-relaxed max-w-2xl mx-auto">
-          We've received your message and will review it carefully. We respond to selected 
-          inquiries that fit our mandate.
-        </p>
-        <Button
-          data-testid="button-send-another"
-          variant="outline"
-          size="lg"
-          onClick={() => {
-            setIsSubmitted(false);
-            form.reset();
-          }}
-          className="text-base px-8 py-6"
-        >
-          Send Another Message
-        </Button>
-      </div>
-    );
-  }
+  const handleEmailClick = (email: string) => {
+    window.location.href = `mailto:${email}?subject=Strategic Inquiry - Iron & Oak`;
+  };
 
   return (
-    <div className="max-w-3xl mx-auto">
+    <div className="max-w-4xl mx-auto">
       <div className="mb-12">
         <div className="inline-block mb-6 px-4 py-2 rounded-full bg-primary/10 border border-primary/20">
           <p className="text-sm font-mono text-primary">Get in Touch</p>
@@ -101,176 +39,116 @@ export default function ContactForm() {
           Contact Iron & Oak
         </h2>
         <div className="h-1 w-24 bg-gradient-to-r from-primary to-yellow-500 rounded-full mb-8"></div>
-        <p className="text-lg text-muted-foreground leading-relaxed">
-          We respond to selected inquiries that fit our mandate. Please provide details 
-          about your organization and strategic objectives.
+        <p className="text-xl text-muted-foreground leading-relaxed max-w-3xl">
+          We respond to selected inquiries that fit our mandate. Reach out directly via email 
+          to discuss your strategic objectives.
         </p>
       </div>
 
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <FormField
-              control={form.control}
-              name="name"
-              rules={{ required: "Name is required" }}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-base font-medium">Name</FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      data-testid="input-name"
-                      placeholder="Your full name"
-                      disabled={submitMutation.isPending}
-                      className="bg-card border-2 h-14 text-base focus:border-primary transition-all"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="email"
-              rules={{
-                required: "Email is required",
-                pattern: {
-                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                  message: "Invalid email address",
-                },
-              }}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-base font-medium">Email</FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      data-testid="input-email"
-                      type="email"
-                      placeholder="your.email@company.com"
-                      disabled={submitMutation.isPending}
-                      className="bg-card border-2 h-14 text-base focus:border-primary transition-all"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-
-          <FormField
-            control={form.control}
-            name="organization"
-            rules={{ required: "Organization is required" }}
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-base font-medium">Organization</FormLabel>
-                <FormControl>
-                  <Input
-                    {...field}
-                    data-testid="input-organization"
-                    placeholder="Your company or organization"
-                    disabled={submitMutation.isPending}
-                    className="bg-card border-2 h-14 text-base focus:border-primary transition-all"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="objective"
-            rules={{ required: "Objective is required" }}
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-base font-medium">Strategic Objective</FormLabel>
-                <FormControl>
-                  <Input
-                    {...field}
-                    data-testid="input-objective"
-                    placeholder="What are you looking to accomplish?"
-                    disabled={submitMutation.isPending}
-                    className="bg-card border-2 h-14 text-base focus:border-primary transition-all"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="message"
-            rules={{ required: "Message is required" }}
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-base font-medium">Message</FormLabel>
-                <FormControl>
-                  <Textarea
-                    {...field}
-                    data-testid="input-message"
-                    placeholder="Provide details about your situation, constraints, and what you're looking for..."
-                    rows={8}
-                    disabled={submitMutation.isPending}
-                    className="bg-card border-2 text-base resize-none focus:border-primary transition-all"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <Button
-            data-testid="button-submit-contact"
-            type="submit"
-            size="lg"
-            disabled={submitMutation.isPending}
-            className="w-full text-lg py-7 shadow-2xl shadow-primary/20 hover:shadow-primary/30 transition-all duration-300"
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+        {emails.map((item, index) => (
+          <Card
+            key={item.address}
+            className="p-8 hover-elevate transition-all duration-500 hover:-translate-y-2 bg-gradient-to-br from-card to-card/50 border-2 hover:border-primary/30 relative overflow-hidden group"
+            style={{
+              animation: `scale-in 0.8s ease-out ${0.1 * index}s both`
+            }}
           >
-            {submitMutation.isPending ? (
-              <>
-                <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                Sending...
-              </>
-            ) : (
-              "Submit Inquiry"
-            )}
-          </Button>
-        </form>
-      </Form>
+            <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-3xl group-hover:bg-primary/10 transition-all duration-500"></div>
+            <div className="relative">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-12 h-12 bg-gradient-to-br from-primary/20 to-primary/10 rounded-xl flex items-center justify-center">
+                  <Mail className="w-6 h-6 text-primary" />
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">{item.label}</p>
+                </div>
+              </div>
+              
+              <a
+                href={`mailto:${item.address}`}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleEmailClick(item.address);
+                }}
+                className="text-lg font-medium text-primary hover:underline block mb-3 transition-all"
+              >
+                {item.address}
+              </a>
 
-      <div className="mt-12 p-10 bg-gradient-to-br from-card to-primary/5 rounded-3xl border-2 border-card-border">
-        <h3 className="font-serif text-2xl font-bold text-foreground mb-6">Direct Contact</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <p className="text-sm text-muted-foreground mb-2">General Inquiries</p>
-            <a href="mailto:contact@iron-oak.ca" className="text-lg text-primary hover:underline font-medium transition-all">
-              contact@iron-oak.ca
-            </a>
-          </div>
-          <div>
-            <p className="text-sm text-muted-foreground mb-2">Strategic Consulting</p>
-            <a href="mailto:strategy@iron-oak.ca" className="text-lg text-primary hover:underline font-medium transition-all">
-              strategy@iron-oak.ca
-            </a>
-          </div>
-          <div>
-            <p className="text-sm text-muted-foreground mb-2">Project Inquiries</p>
-            <a href="mailto:projects@iron-oak.ca" className="text-lg text-primary hover:underline font-medium transition-all">
-              projects@iron-oak.ca
-            </a>
-          </div>
-          <div>
-            <p className="text-sm text-muted-foreground mb-2">Client Support</p>
-            <a href="mailto:support@iron-oak.ca" className="text-lg text-primary hover:underline font-medium transition-all">
-              support@iron-oak.ca
-            </a>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => copyToClipboard(item.address)}
+                className="w-full group/btn"
+              >
+                {copiedEmail === item.address ? (
+                  <>
+                    <CheckCircle2 className="w-4 h-4 mr-2 text-primary" />
+                    Copied!
+                  </>
+                ) : (
+                  <>
+                    <Copy className="w-4 h-4 mr-2 group-hover/btn:text-primary transition-colors" />
+                    Copy Email
+                  </>
+                )}
+              </Button>
+            </div>
+          </Card>
+        ))}
+      </div>
+
+      <Card className="p-12 bg-gradient-to-br from-primary/10 to-primary/5 border-2 border-primary/30 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-3xl"></div>
+        <div className="relative">
+          <h3 className="font-serif text-3xl font-bold text-foreground mb-6">
+            Ready to Start a Conversation?
+          </h3>
+          <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
+            Click any email above to open your mail client, or copy the address to reach out 
+            at your convenience. We look forward to discussing how Iron & Oak can support your 
+            strategic initiatives.
+          </p>
+          <div className="flex flex-wrap gap-4">
+            <Button
+              size="lg"
+              onClick={() => handleEmailClick("strategy@iron-oak.ca")}
+              className="shadow-xl shadow-primary/20"
+            >
+              <Mail className="mr-2 w-5 h-5" />
+              Email Strategy Team
+            </Button>
+            <Button
+              variant="outline"
+              size="lg"
+              onClick={() => handleEmailClick("contact@iron-oak.ca")}
+            >
+              <Mail className="mr-2 w-5 h-5" />
+              General Inquiry
+            </Button>
           </div>
         </div>
+      </Card>
+
+      <div className="mt-12 p-8 bg-card rounded-3xl border border-card-border">
+        <h4 className="font-semibold text-lg text-foreground mb-4">
+          What to Include in Your Message
+        </h4>
+        <ul className="space-y-3">
+          {[
+            "Your name and organization",
+            "Strategic objective or challenge you're facing",
+            "Current constraints and timeline",
+            "What you're looking to accomplish",
+            "Any relevant context about your situation"
+          ].map((item, index) => (
+            <li key={index} className="flex items-start gap-3">
+              <div className="w-1.5 h-1.5 rounded-full bg-primary mt-2 flex-shrink-0"></div>
+              <p className="text-base text-muted-foreground">{item}</p>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   );

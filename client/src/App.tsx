@@ -11,7 +11,7 @@ import Projects from "@/pages/Projects";
 import Contact from "@/pages/Contact";
 import Privacy from "@/pages/Privacy";
 import Terms from "@/pages/Terms";
-import AdminLeads from "@/pages/AdminLeads";
+import AIIntensive from "@/pages/AIIntensive";
 
 function Router() {
   return (
@@ -23,7 +23,7 @@ function Router() {
       <Route path="/contact" component={Contact} />
       <Route path="/privacy" component={Privacy} />
       <Route path="/terms" component={Terms} />
-      <Route path="/admin/leads" component={AdminLeads} />
+      <Route path="/ai" component={AIIntensive} />
       <Route component={NotFound} />
     </Switch>
   );
