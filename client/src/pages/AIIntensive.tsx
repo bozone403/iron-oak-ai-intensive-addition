@@ -77,9 +77,26 @@ export default function AIIntensive() {
               <p className="text-lg text-muted-foreground mb-6">
                 You'll receive a call from us shortly to discuss the AI Intensive course.
               </p>
-              <p className="text-base text-muted-foreground">
+              <p className="text-base text-muted-foreground mb-8">
                 After our call, we'll send you an SMS with a payment link to complete your registration.
               </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Button
+                  onClick={() => window.location.href = 'https://buy.stripe.com/3cI8wPfvVh0tgTb7iSgnK02'}
+                  size="lg"
+                  className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold"
+                >
+                  Buy Now - $1,500
+                </Button>
+                <Button
+                  onClick={() => window.location.href = '/'}
+                  variant="outline"
+                  size="lg"
+                  className="border-border/50 hover:bg-background/50"
+                >
+                  Return Home
+                </Button>
+              </div>
             </Card>
           </div>
         </div>

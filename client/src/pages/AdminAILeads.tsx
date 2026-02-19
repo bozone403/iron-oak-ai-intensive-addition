@@ -30,9 +30,24 @@ interface AILead {
 }
 
 export default function AdminAILeads() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+
+  const handlePasswordSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (password === 'Oliver92!@') {
+      setIsAuthenticated(true);
+      setError('');
+    } else {
+      setError('Incorrect password');
+    }
+  };
+
   const { data, isLoading, refetch } = useQuery<{ success: boolean; leads: AILead[] }>({
     queryKey: ["/api/ai/leads"],
     refetchInterval: 10000, // Refresh every 10 seconds
+    enabled: isAuthenticated, // Only fetch if authenticated
   });
 
   const leads = data?.leads || [];
@@ -73,6 +88,46 @@ export default function AdminAILeads() {
       </Badge>
     );
   };
+
+  // Show password prompt if not authenticated
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Navigation />
+        <div className="pt-32 pb-24">
+          <div className="max-w-md mx-auto px-6">
+            <Card className="p-8">
+              <h2 className="font-serif text-2xl font-bold text-foreground mb-4 text-center">
+                Admin Access
+              </h2>
+              <p className="text-muted-foreground mb-6 text-center">
+                Enter password to view AI Intensive registrations
+              </p>
+              <form onSubmit={handlePasswordSubmit}>
+                <div className="mb-4">
+                  <input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="Enter password"
+                    className="w-full px-4 py-2 border border-border rounded-md bg-background focus:outline-none focus:ring-2 focus:ring-primary"
+                    autoFocus
+                  />
+                </div>
+                {error && (
+                  <p className="text-red-500 text-sm mb-4">{error}</p>
+                )}
+                <Button type="submit" className="w-full" size="lg">
+                  Access Admin Panel
+                </Button>
+              </form>
+            </Card>
+          </div>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">
