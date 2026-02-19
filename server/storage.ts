@@ -20,6 +20,7 @@ export interface IStorage {
   updateAILead(id: string, updates: Partial<AILead>): Promise<void>;
   trySetSmsSending(id: string, outcome: 'completed_offer' | 'missed_offer'): Promise<boolean>;
   getAllAILeads(): Promise<AILead[]>;
+  deleteAILead(id: string): Promise<boolean>;
 }
 
 export interface AILead {
@@ -43,6 +44,8 @@ export interface AILead {
   paidAt: string | null;
   optedOut: boolean;
   optedOutAt: string | null;
+  scheduledDate: string | null;
+  scheduledNotes: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -263,6 +266,22 @@ export class MemStorage implements IStorage {
 
   async getAllAILeads(): Promise<AILead[]> {
     return readAILeadsFile();
+  }
+
+  async deleteAILead(id: string): Promise<boolean> {
+    await aiLeadsLock.acquire();
+    try {
+      const leads = await readAILeadsFile();
+      const index = leads.findIndex(l => l.id === id);
+      if (index === -1) {
+        return false;
+      }
+      leads.splice(index, 1);
+      await writeAILeadsFile(leads);
+      return true;
+    } finally {
+      aiLeadsLock.release();
+    }
   }
 }
 

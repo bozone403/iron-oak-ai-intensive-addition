@@ -634,4 +634,44 @@ Reply STOP to opt out.`;
       return res.status(500).send('Failed to generate CSV');
     }
   });
+
+  // DELETE /api/ai/admin/leads/:id - Delete a lead
+  app.delete('/api/ai/admin/leads/:id', async (req, res) => {
+    try {
+      const { id } = req.params;
+      const deleted = await storage.deleteAILead(id);
+      
+      if (!deleted) {
+        return res.status(404).json({ error: 'Lead not found' });
+      }
+      
+      return res.json({ success: true });
+    } catch (error) {
+      console.error('Error in DELETE /api/ai/admin/leads/:id:', error);
+      return res.status(500).json({ error: 'Failed to delete lead' });
+    }
+  });
+
+  // PATCH /api/ai/admin/leads/:id - Update a lead
+  app.patch('/api/ai/admin/leads/:id', express.json(), async (req, res) => {
+    try {
+      const { id } = req.params;
+      const updates = req.body;
+      
+      const lead = await storage.getAILeadById(id);
+      if (!lead) {
+        return res.status(404).json({ error: 'Lead not found' });
+      }
+      
+      await storage.updateAILead(id, {
+        ...updates,
+        updatedAt: new Date().toISOString(),
+      });
+      
+      return res.json({ success: true });
+    } catch (error) {
+      console.error('Error in PATCH /api/ai/admin/leads/:id:', error);
+      return res.status(500).json({ error: 'Failed to update lead' });
+    }
+  });
 }
