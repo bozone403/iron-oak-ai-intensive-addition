@@ -86,7 +86,7 @@ export default function AIIntensive() {
                   size="lg"
                   className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold"
                 >
-                  Buy Now - $1,500
+                  Buy Now - $280
                 </Button>
                 <Button
                   onClick={() => window.location.href = '/'}
