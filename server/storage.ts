@@ -269,8 +269,7 @@ export class MemStorage implements IStorage {
   }
 
   async deleteAILead(id: string): Promise<boolean> {
-    await aiLeadsLock.acquire();
-    try {
+    return fileLock.acquire('ai-leads', async () => {
       const leads = await readAILeadsFile();
       const index = leads.findIndex(l => l.id === id);
       if (index === -1) {
@@ -279,9 +278,7 @@ export class MemStorage implements IStorage {
       leads.splice(index, 1);
       await writeAILeadsFile(leads);
       return true;
-    } finally {
-      aiLeadsLock.release();
-    }
+    });
   }
 }
 

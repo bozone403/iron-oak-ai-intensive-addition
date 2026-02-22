@@ -695,6 +695,17 @@ Reply STOP to opt out.`;
     }
   });
 
+  // GET /api/ai/admin/leads - Get all leads for admin dashboard
+  app.get('/api/ai/admin/leads', async (req, res) => {  
+    try {
+      const leads = await storage.getAllAILeads();
+      return res.json(leads);
+    } catch (error) {
+      console.error('Error in GET /api/ai/admin/leads:', error);
+      return res.status(500).json({ error: 'Failed to fetch leads' });
+    }
+  });
+
   // DELETE /api/ai/admin/leads/:id - Delete a lead
   app.delete('/api/ai/admin/leads/:id', async (req, res) => {
     try {
