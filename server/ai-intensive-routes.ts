@@ -297,22 +297,38 @@ Questions? Reply to this message.`;
       
       console.log(`Voice webhook: ${direction} call from ${fromNumber} to ${toNumber}, lead phone: ${leadPhone}`);
       
-      const lead = await storage.getAILeadByPhone(leadPhone);
+      let lead = await storage.getAILeadByPhone(leadPhone);
       
-      if (!lead) {
+      // Auto-create lead for inbound calls from unknown numbers
+      if (!lead && isInbound) {
+        console.log(`Creating new lead for inbound caller: ${leadPhone}`);
+        lead = await storage.createAILead({
+          firstName: 'Unknown',
+          lastName: 'Caller',
+          email: '',
+          phone: leadPhone,
+          consentGiven: false,
+          source: 'inbound_call',
+          callSid: callSid,
+          callStatus: 'initiated',
+        });
+      } else if (!lead) {
+        // Outbound call but no lead found - this shouldn't happen
+        console.error(`Outbound call to ${leadPhone} but no lead found`);
         res.type('text/xml');
         res.send(`<?xml version="1.0" encoding="UTF-8"?>
 <Response>
-  <Say voice="Polly.Matthew">Sorry, we could not find your information. Please visit iron dash oak dot ca to register.</Say>
+  <Say voice="Polly.Matthew">Sorry, we encountered an error. Please try again later.</Say>
   <Hangup/>
 </Response>`);
         return;
+      } else {
+        // Update existing lead with call info
+        await storage.updateAILead(lead.id, {
+          callSid: callSid,
+          callStatus: 'initiated',
+        });
       }
-      
-      await storage.updateAILead(lead.id, {
-        callSid: callSid,
-        callStatus: 'initiated',
-      });
       
       // Make direct HTTP call to ElevenLabs API instead of using SDK
       const elevenLabsResponse = await fetch('https://api.elevenlabs.io/v1/convai/twilio/register-call', {
@@ -329,6 +345,8 @@ Questions? Reply to this message.`;
           conversation_initiation_client_data: {
             dynamic_variables: {
               firstName: lead.firstName,
+              isInbound: isInbound.toString(),
+              needsInfo: (lead.firstName === 'Unknown').toString(),
               courseDates: process.env.COURSE_DATES || '',
               courseTime: process.env.COURSE_TIME || '',
               courseLocation: process.env.COURSE_LOCATION || '',
