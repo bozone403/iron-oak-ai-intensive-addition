@@ -306,12 +306,12 @@ Questions? Reply to this message.`;
       });
       
       const response = await elevenlabs.conversationalAi.twilio.registerCall({
-        agent_id: process.env.ELEVENLABS_AGENT_ID!,
-        from_number: fromNumber,
-        to_number: leadPhone,
+        agentId: process.env.ELEVENLABS_AGENT_ID!,
+        fromNumber: fromNumber,
+        toNumber: leadPhone,
         direction: 'outbound',
-        conversation_initiation_client_data: {
-          dynamic_variables: {
+        conversationInitiationClientData: {
+          dynamicVariables: {
             firstName: lead.firstName,
             courseDates: process.env.COURSE_DATES || '',
             courseTime: process.env.COURSE_TIME || '',
