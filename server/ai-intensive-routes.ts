@@ -320,7 +320,7 @@ Questions? Reply to this message.`;
         },
       });
       
-      const twiml = await response.text();
+      const twiml = await response.rawResponse.text();
       
       console.log(`TwiML for CallSid ${callSid}:`, twiml);
       
