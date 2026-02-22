@@ -302,16 +302,35 @@ Questions? Reply to this message.`;
       // Auto-create lead for inbound calls from unknown numbers
       if (!lead && isInbound) {
         console.log(`Creating new lead for inbound caller: ${leadPhone}`);
-        lead = await storage.createAILead({
+        const newLeadId = uuidv4();
+        const newLead = {
+          id: newLeadId,
           firstName: 'Unknown',
-          lastName: 'Caller',
-          email: '',
           phone: leadPhone,
+          email: null,
           consentGiven: false,
-          source: 'inbound_call',
-          callSid: callSid,
+          consentTimestamp: new Date().toISOString(),
+          ipAddress: null,
+          userAgent: null,
           callStatus: 'initiated',
-        });
+          callSid: callSid,
+          callDuration: null,
+          smsStatus: 'pending' as const,
+          smsOutcome: null,
+          smsSid: null,
+          smsSentAt: null,
+          paymentStatus: 'pending',
+          amountPaid: null,
+          paidAt: null,
+          optedOut: false,
+          optedOutAt: null,
+          scheduledDate: null,
+          scheduledNotes: null,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        };
+        await storage.saveAILead(newLead);
+        lead = newLead;
       } else if (!lead) {
         // Outbound call but no lead found - this shouldn't happen
         console.error(`Outbound call to ${leadPhone} but no lead found`);
