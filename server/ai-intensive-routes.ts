@@ -283,10 +283,19 @@ Questions? Reply to this message.`;
         return res.status(403).send('Forbidden');
       }
       
-      // PATCH A: For outbound calls, lead's phone is in 'To' parameter
-      const leadPhone = req.body.To;
+      // Determine call direction and identify lead's phone number
       const fromNumber = req.body.From;
+      const toNumber = req.body.To;
       const callSid = req.body.CallSid;
+      const twilioNumber = process.env.TWILIO_PHONE_NUMBER!;
+      
+      // For inbound calls: user calls Twilio number, so user is 'From'
+      // For outbound calls: Twilio calls user, so user is 'To'
+      const isInbound = toNumber === twilioNumber;
+      const leadPhone = isInbound ? fromNumber : toNumber;
+      const direction = isInbound ? 'inbound' : 'outbound';
+      
+      console.log(`Voice webhook: ${direction} call from ${fromNumber} to ${toNumber}, lead phone: ${leadPhone}`);
       
       const lead = await storage.getAILeadByPhone(leadPhone);
       
@@ -315,8 +324,8 @@ Questions? Reply to this message.`;
         body: JSON.stringify({
           agent_id: process.env.ELEVENLABS_AGENT_ID!,
           from_number: fromNumber,
-          to_number: leadPhone,
-          direction: 'outbound',
+          to_number: toNumber,
+          direction: direction,
           conversation_initiation_client_data: {
             dynamic_variables: {
               firstName: lead.firstName,
