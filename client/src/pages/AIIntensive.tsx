@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import { useState } from "react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Brain, Zap, Target, Users, Calendar, Clock, MapPin, Phone, CheckCircle2 } from "lucide-react";
+import { Brain, Zap, Target, Users, Calendar, Clock, MapPin, Phone, CheckCircle2, ChevronLeft, ChevronRight } from "lucide-react";
 
 export default function AIIntensive() {
   const [formData, setFormData] = useState({
@@ -18,6 +18,38 @@ export default function AIIntensive() {
 
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  const learningCards = [
+    {
+      icon: Brain,
+      title: "AI Fundamentals",
+      description: "Understand core AI concepts, LLMs, and how to evaluate AI tools for your specific needs."
+    },
+    {
+      icon: Zap,
+      title: "Automation & Integration",
+      description: "Build practical automations and integrate AI into your existing workflows and systems."
+    },
+    {
+      icon: Target,
+      title: "Advanced Topics",
+      description: "Explore RAG, fine-tuning, agents, and cutting-edge AI techniques for complex problems."
+    },
+    {
+      icon: Users,
+      title: "Real-World Implementation",
+      description: "Apply what you've learned to your own projects with hands-on guidance and support."
+    }
+  ];
+
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % learningCards.length);
+  };
+
+  const prevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + learningCards.length) % learningCards.length);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -109,10 +141,10 @@ export default function AIIntensive() {
     <div className="min-h-screen bg-background">
       <Navigation />
       
-      {/* Hero Section */}
+      {/* Hero Section with Form First */}
       <div className="pt-32 pb-16">
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
-          <div className="text-center mb-16">
+          <div className="text-center mb-12">
             <div className="inline-block mb-6 px-4 py-2 rounded-full bg-primary/10 border border-primary/20">
               <p className="text-sm font-mono text-primary">4-Evening Intensive Course</p>
             </div>
@@ -125,77 +157,8 @@ export default function AIIntensive() {
             </p>
           </div>
 
-          {/* Course Details Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
-            <Card className="p-6 bg-gradient-to-br from-card to-primary/5 border-2 hover:border-primary/30 transition-all hover-elevate">
-              <Calendar className="w-8 h-8 text-primary mb-4" />
-              <h3 className="font-serif text-lg font-bold text-foreground mb-2">When</h3>
-              <p className="text-muted-foreground">Every Thursday to Sunday</p>
-            </Card>
-
-            <Card className="p-6 bg-gradient-to-br from-card to-primary/5 border-2 hover:border-primary/30 transition-all hover-elevate">
-              <Clock className="w-8 h-8 text-primary mb-4" />
-              <h3 className="font-serif text-lg font-bold text-foreground mb-2">Time</h3>
-              <p className="text-muted-foreground">7:00 PM - 8:15 PM</p>
-            </Card>
-
-            <Card className="p-6 bg-gradient-to-br from-card to-primary/5 border-2 hover:border-primary/30 transition-all hover-elevate">
-              <MapPin className="w-8 h-8 text-primary mb-4" />
-              <h3 className="font-serif text-lg font-bold text-foreground mb-2">Location</h3>
-              <p className="text-muted-foreground">Airdrie, AB</p>
-            </Card>
-          </div>
-
-          {/* What You'll Learn */}
-          <div className="mb-16">
-            <h2 className="font-serif text-3xl font-bold text-foreground mb-8 text-center">
-              What You'll Learn
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <Card className="p-8 bg-gradient-to-br from-card to-card/50 border-2 hover:border-primary/30 transition-all hover-elevate">
-                <Brain className="w-10 h-10 text-primary mb-4" />
-                <h3 className="font-serif text-xl font-bold text-foreground mb-3">
-                  AI Fundamentals
-                </h3>
-                <p className="text-muted-foreground leading-relaxed">
-                  Understand core AI concepts, LLMs, and how to evaluate AI tools for your specific needs.
-                </p>
-              </Card>
-
-              <Card className="p-8 bg-gradient-to-br from-card to-card/50 border-2 hover:border-primary/30 transition-all hover-elevate">
-                <Zap className="w-10 h-10 text-primary mb-4" />
-                <h3 className="font-serif text-xl font-bold text-foreground mb-3">
-                  Automation & Integration
-                </h3>
-                <p className="text-muted-foreground leading-relaxed">
-                  Build practical automations and integrate AI into your existing workflows and systems.
-                </p>
-              </Card>
-
-              <Card className="p-8 bg-gradient-to-br from-card to-card/50 border-2 hover:border-primary/30 transition-all hover-elevate">
-                <Target className="w-10 h-10 text-primary mb-4" />
-                <h3 className="font-serif text-xl font-bold text-foreground mb-3">
-                  Advanced Topics
-                </h3>
-                <p className="text-muted-foreground leading-relaxed">
-                  Explore RAG, fine-tuning, agents, and cutting-edge AI techniques for complex problems.
-                </p>
-              </Card>
-
-              <Card className="p-8 bg-gradient-to-br from-card to-card/50 border-2 hover:border-primary/30 transition-all hover-elevate">
-                <Users className="w-10 h-10 text-primary mb-4" />
-                <h3 className="font-serif text-xl font-bold text-foreground mb-3">
-                  Real-World Implementation
-                </h3>
-                <p className="text-muted-foreground leading-relaxed">
-                  Apply what you've learned to your own projects with hands-on guidance and support.
-                </p>
-              </Card>
-            </div>
-          </div>
-
-          {/* Registration Form */}
-          <div className="max-w-2xl mx-auto">
+          {/* Registration Form - Now at Top */}
+          <div className="max-w-2xl mx-auto mb-16">
             <Card className="p-10 bg-gradient-to-br from-card to-primary/5 border-2">
               <div className="mb-8 text-center">
                 <Phone className="w-12 h-12 text-primary mx-auto mb-4" />
@@ -309,6 +272,93 @@ export default function AIIntensive() {
                 </p>
               </form>
             </Card>
+          </div>
+
+          {/* Course Details Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+            <Card className="p-6 bg-gradient-to-br from-card to-primary/5 border-2 hover:border-primary/30 transition-all hover-elevate">
+              <Calendar className="w-8 h-8 text-primary mb-4" />
+              <h3 className="font-serif text-lg font-bold text-foreground mb-2">When</h3>
+              <p className="text-muted-foreground">Every Thursday to Sunday</p>
+            </Card>
+
+            <Card className="p-6 bg-gradient-to-br from-card to-primary/5 border-2 hover:border-primary/30 transition-all hover-elevate">
+              <Clock className="w-8 h-8 text-primary mb-4" />
+              <h3 className="font-serif text-lg font-bold text-foreground mb-2">Time</h3>
+              <p className="text-muted-foreground">7:00 PM - 8:15 PM</p>
+            </Card>
+
+            <Card className="p-6 bg-gradient-to-br from-card to-primary/5 border-2 hover:border-primary/30 transition-all hover-elevate">
+              <MapPin className="w-8 h-8 text-primary mb-4" />
+              <h3 className="font-serif text-lg font-bold text-foreground mb-2">Location</h3>
+              <p className="text-muted-foreground">Airdrie, AB</p>
+            </Card>
+          </div>
+
+          {/* What You'll Learn - Carousel */}
+          <div className="mb-16">
+            <h2 className="font-serif text-3xl font-bold text-foreground mb-8 text-center">
+              What You'll Learn
+            </h2>
+            
+            <div className="relative max-w-3xl mx-auto">
+              {/* Carousel Container */}
+              <div className="overflow-hidden">
+                <div 
+                  className="flex transition-transform duration-500 ease-in-out"
+                  style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+                >
+                  {learningCards.map((card, index) => {
+                    const Icon = card.icon;
+                    return (
+                      <div key={index} className="w-full flex-shrink-0 px-4">
+                        <Card className="p-8 bg-gradient-to-br from-card to-card/50 border-2 hover:border-primary/30 transition-all hover-elevate">
+                          <Icon className="w-10 h-10 text-primary mb-4" />
+                          <h3 className="font-serif text-xl font-bold text-foreground mb-3">
+                            {card.title}
+                          </h3>
+                          <p className="text-muted-foreground leading-relaxed">
+                            {card.description}
+                          </p>
+                        </Card>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Navigation Buttons */}
+              <button
+                onClick={prevSlide}
+                className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 bg-primary/10 hover:bg-primary/20 text-primary p-2 rounded-full transition-all"
+                aria-label="Previous slide"
+              >
+                <ChevronLeft className="w-6 h-6" />
+              </button>
+              <button
+                onClick={nextSlide}
+                className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 bg-primary/10 hover:bg-primary/20 text-primary p-2 rounded-full transition-all"
+                aria-label="Next slide"
+              >
+                <ChevronRight className="w-6 h-6" />
+              </button>
+
+              {/* Dots Indicator */}
+              <div className="flex justify-center gap-2 mt-6">
+                {learningCards.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setCurrentSlide(index)}
+                    className={`w-2 h-2 rounded-full transition-all ${
+                      index === currentSlide 
+                        ? 'bg-primary w-8' 
+                        : 'bg-primary/30 hover:bg-primary/50'
+                    }`}
+                    aria-label={`Go to slide ${index + 1}`}
+                  />
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </div>
