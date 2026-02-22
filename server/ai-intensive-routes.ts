@@ -305,22 +305,36 @@ Questions? Reply to this message.`;
         callStatus: 'initiated',
       });
       
-      const response = await elevenlabs.conversationalAi.twilio.registerCall({
-        agentId: process.env.ELEVENLABS_AGENT_ID!,
-        fromNumber: fromNumber,
-        toNumber: leadPhone,
-        direction: 'outbound',
-        conversationInitiationClientData: {
-          dynamicVariables: {
-            firstName: lead.firstName,
-            courseDates: process.env.COURSE_DATES || '',
-            courseTime: process.env.COURSE_TIME || '',
-            courseLocation: process.env.COURSE_LOCATION || '',
-          },
+      // Make direct HTTP call to ElevenLabs API instead of using SDK
+      const elevenLabsResponse = await fetch('https://api.elevenlabs.io/v1/convai/twilio/register-call', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'xi-api-key': process.env.ELEVENLABS_API_KEY!,
         },
+        body: JSON.stringify({
+          agent_id: process.env.ELEVENLABS_AGENT_ID!,
+          from_number: fromNumber,
+          to_number: leadPhone,
+          direction: 'outbound',
+          conversation_initiation_client_data: {
+            dynamic_variables: {
+              firstName: lead.firstName,
+              courseDates: process.env.COURSE_DATES || '',
+              courseTime: process.env.COURSE_TIME || '',
+              courseLocation: process.env.COURSE_LOCATION || '',
+            },
+          },
+        }),
       });
       
-      const twiml = await response.rawResponse.text();
+      if (!elevenLabsResponse.ok) {
+        const errorText = await elevenLabsResponse.text();
+        console.error('ElevenLabs API error:', elevenLabsResponse.status, errorText);
+        throw new Error(`ElevenLabs API returned ${elevenLabsResponse.status}`);
+      }
+      
+      const twiml = await elevenLabsResponse.text();
       
       console.log(`TwiML for CallSid ${callSid}:`, twiml);
       
