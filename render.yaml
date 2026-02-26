@@ -1,0 +1,42 @@
+services:
+  - type: web
+    name: iron-oak-ai-backend
+    runtime: node
+    plan: free
+    buildCommand: npm install --include=dev && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 5000
+      - key: TWILIO_ACCOUNT_SID
+        sync: false
+      - key: TWILIO_AUTH_TOKEN
+        sync: false
+      - key: TWILIO_PHONE_NUMBER
+        sync: false
+      - key: ELEVENLABS_AGENT_ID
+        sync: false
+      - key: ELEVENLABS_API_KEY
+        sync: false
+      - key: STRIPE_SECRET_KEY
+        sync: false
+      - key: STRIPE_WEBHOOK_SECRET
+        sync: false
+      - key: STRIPE_PAYMENT_LINK
+        sync: false
+      - key: COURSE_DATES
+        value: Last Thursday-Sunday of every month
+      - key: COURSE_TIME
+        value: 7:00 PM - 8:15 PM
+      - key: COURSE_LOCATION
+        value: Airdrie, AB
+      - key: COURSE_CONTACT_EMAIL
+        value: Registration@iron-oak.ca
+      - key: COURSE_CONTACT_PHONE
+        value: 403-613-6014
+    disk:
+      name: ai-intensive-data
+      mountPath: /app/data
+      sizeGB: 1

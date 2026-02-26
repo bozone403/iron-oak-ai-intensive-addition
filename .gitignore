@@ -1,0 +1,29 @@
+# deps
+node_modules/
+client/node_modules/
+server/node_modules/
+
+# builds
+dist/
+client/dist/
+server/dist/
+build/
+client/build/
+server/build/
+
+# env + secrets
+.env
+.env.*
+*.key
+*.pem
+
+# logs
+*.log
+
+# OS junk
+.DS_Store
+
+# archives/big assets
+*.zip
+*.tar
+*.gz
